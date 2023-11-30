@@ -11,7 +11,7 @@ import axios from "axios";
 import Profile from "./pages/Profile";
 
 function App() {
-  const base_api_url = "https://instapost-p0py.onrender.com/";
+  const base_api_url = "https://instapost-p0py.onrender.com";
   const accessToken = localStorage.getItem("accessToken");
   const [authState, setAuthState] = useState(false);
   const [likeState, setLikeState] = useState(false);
