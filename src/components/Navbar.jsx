@@ -26,7 +26,7 @@ function Navbar({ base_api_url }) {
     <div className="flex justify-between items-center px-6 pt-10">
       {/* logo */}
       <section className="flex items-center">
-        <img src="images/instamedia alt.png" alt="logo" className="w-14" />
+        <img src="/images/instamedia alt.png" alt="logo" className="w-14" />
         <Link to={"/"} className="font-bold text-gray-300 text-2xl">
           <span className="text-sky-400">nsta</span>media
         </Link>
