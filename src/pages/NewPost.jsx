@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function NewPost({ base_api_url }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [postText, setPostText] = useState("");
   const [files, setFiles] = useState(null);
   const navigate = useNavigate();
@@ -16,12 +17,15 @@ function NewPost({ base_api_url }) {
       formData.append("postPictures", files[i]);
     }
 
+    setIsLoading(true);
+
     await axios.post(`${base_api_url}/posts`, formData, {
       headers: {
         accessToken: accessToken,
       },
     });
 
+    setIsLoading(false);
     navigate("/");
   };
   return (
@@ -37,7 +41,7 @@ function NewPost({ base_api_url }) {
           onChange={(e) => setFiles(e.target.files)}
         />
         <button className="submit" onClick={handleSubmit}>
-          Post
+          {isLoading ? "Just a sec..." : "Post"}
         </button>
       </form>
     </div>

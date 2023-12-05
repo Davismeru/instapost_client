@@ -3,12 +3,14 @@ import Post from "../components/Post";
 import Search from "../components/Search";
 import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
+import Loader from "../components/Loader";
 
 function Home({ base_api_url, activeUser }) {
   const [posts, setPosts] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const { likeState } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleLoadMore = () => {
     setPageCount(pageCount + 1);
@@ -19,12 +21,14 @@ function Home({ base_api_url, activeUser }) {
     axios.get(`${base_api_url}/posts?page=${pageCount}`).then((res) => {
       setPosts(res.data.data);
       setTotalPages(res.data.totalPages);
+      setIsLoading(false);
     });
   }, [pageCount, likeState]);
 
   return (
     <div className="p-5 w-full">
       <Search base_api_url={base_api_url} />
+      {isLoading && <Loader />}
       <section>
         {posts.map((post, index) => (
           <Post
@@ -37,13 +41,15 @@ function Home({ base_api_url, activeUser }) {
         ))}
       </section>
 
-      <section className="flex justify-center">
-        {pageCount != totalPages - 1 && (
-          <button className="rounded-sm" onClick={handleLoadMore}>
-            load more
-          </button>
-        )}
-      </section>
+      {!isLoading && (
+        <section className="flex justify-center">
+          {pageCount != totalPages - 1 && (
+            <button className="rounded-sm" onClick={handleLoadMore}>
+              load more
+            </button>
+          )}
+        </section>
+      )}
     </div>
   );
 }

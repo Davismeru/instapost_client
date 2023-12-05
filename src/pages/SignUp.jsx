@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function SignUp({ base_api_url }) {
+  const [isLoading, setIsLoading] = useState(false);
   // form input states
   const [userName, setUserName] = useState(" ");
   const [email, setEmail] = useState("");
@@ -22,12 +23,14 @@ function SignUp({ base_api_url }) {
   const formData = new FormData();
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     formData.append("userName", userName);
     formData.append("email", email);
     formData.append("password", password);
     formData.append("profilePicture", file[0]);
 
     await axios.post(`${base_api_url}/users/signup`, formData);
+    setIsLoading(false);
     navigate("/signin");
   };
 
@@ -131,7 +134,7 @@ function SignUp({ base_api_url }) {
             file == null
           }
         >
-          Create account
+          {isLoading ? "Just a sec..." : "Create account"}
         </button>
       </form>
 

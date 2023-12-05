@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { BiSearchAlt } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import Loader from "./Loader";
 
 function Search({ base_api_url }) {
   const [searchValues, setSearchValues] = useState("");
   const [foundUsers, setFoundUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     axios.get(`${base_api_url}/users/search/${searchValues}`).then((res) => {
       setFoundUsers(res.data);
+      setIsLoading(false);
     });
   }, [searchValues]);
 
@@ -28,7 +31,8 @@ function Search({ base_api_url }) {
 
       {searchValues && (
         <div className="search-results">
-          <h1>{foundUsers.length} users match your search</h1>
+          {isLoading && <Loader />}
+          {!isLoading && <h1>{foundUsers.length} users match your search</h1>}
           <section>
             {foundUsers.map((user, index) => (
               <Link key={index} to={`profile/${user.userId}`}>

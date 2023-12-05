@@ -8,12 +8,16 @@ import { AuthContext } from "../helpers/AuthContext";
 function Post({ post, base_api_url, activeUser }) {
   const [liked, setLiked] = useState(false);
   const { likeState, setLikeState } = useContext(AuthContext);
+  const [isLoading, setIsLoading] = useState(false);
   const handleLike = async (id) => {
+    setIsLoading(true);
     await axios.post(`${base_api_url}/likes/${id}`, null, {
       headers: {
         accessToken: localStorage.getItem("accessToken"),
       },
     });
+
+    setIsLoading(false);
 
     if (!liked) {
       setLiked(true);
@@ -80,7 +84,9 @@ function Post({ post, base_api_url, activeUser }) {
             className={liked ? "text-red-400" : "text-gray-400"}
             onClick={() => handleLike(post.id)}
           />
-          <p className="text-sm">{post.likes.length} likes</p>
+          <p className="text-sm">
+            {post.likes.length} {isLoading ? "liking..." : "likes"}
+          </p>
         </section>
 
         <section className="flex items-center gap-2">

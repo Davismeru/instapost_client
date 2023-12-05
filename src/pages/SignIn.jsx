@@ -4,6 +4,7 @@ import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 
 function SignIn({ base_api_url }) {
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ function SignIn({ base_api_url }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     await axios
       .post(`${base_api_url}/users/login`, {
@@ -23,6 +25,7 @@ function SignIn({ base_api_url }) {
         } else {
           localStorage.setItem("accessToken", res.data);
           setAuthState(true);
+          setIsLoading(false);
           navigate("/");
         }
       });
@@ -41,7 +44,7 @@ function SignIn({ base_api_url }) {
           onChange={(e) => setPassword(e.target.value)}
         />
         <button className="submit" onClick={handleSubmit}>
-          Log in
+          {isLoading ? "Just a sec..." : "Log in"}
         </button>
       </form>
 
